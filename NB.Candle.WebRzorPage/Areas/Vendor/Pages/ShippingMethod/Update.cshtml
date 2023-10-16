@@ -1,0 +1,64 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.ShippingMethod.UpdateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">ویرایش روش ارسال</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" class="row pt-2 g-3" enctype="multipart/form-data">
+                <input asp-for="ShippingMethod.ID" hidden />
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" min="0" class="form-control direction-rtl" asp-for="ShippingMethod.Name" placeholder=" ">
+                        <label asp-for="ShippingMethod.Name" class="x-small ms-2"></label>
+                        <span asp-validation-for="ShippingMethod.Name" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="number" min="0" class="form-control direction-rtl" asp-for="ShippingMethod.Cost" placeholder=" ">
+                        <label asp-for="ShippingMethod.Cost" class="x-small ms-2"></label>
+                        <span asp-validation-for="ShippingMethod.Cost" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="number" min="0" class="form-control direction-rtl" asp-for="ShippingMethod.EstimatedDaysToDeliver" placeholder=" ">
+                        <label asp-for="ShippingMethod.EstimatedDaysToDeliver" class="x-small ms-2"></label>
+                        <span asp-validation-for="ShippingMethod.EstimatedDaysToDeliver" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="ShippingMethod.IsInInvoice" class="x-small ms-2"></label>
+                    <input class="direction-rtl" type="checkbox" asp-for="ShippingMethod.IsInInvoice">
+                    <span asp-validation-for="ShippingMethod.IsInInvoice" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="ShippingMethod.IsDefault" class="x-small ms-2"></label>
+                    <input class="direction-rtl" type="checkbox" asp-for="ShippingMethod.IsDefault">
+                    <span asp-validation-for="ShippingMethod.IsDefault" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="ShippingMethod.IsActive" class="x-small ms-2"></label>
+                    <input class="direction-rtl" type="checkbox" asp-for="ShippingMethod.IsActive">
+                    <span asp-validation-for="ShippingMethod.IsActive" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

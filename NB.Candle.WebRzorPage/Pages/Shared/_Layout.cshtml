@@ -1,0 +1,331 @@
+﻿@model Common.BasePage
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="@(ViewData["description"])" />
+    <title>@ViewData["Title"] - NBCandles.com</title>
+    <link rel="canonical" href="@(ViewData["canonical"])" />
+    <link href="~/lib/Bootstrap/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icon/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/css/global.css" rel="stylesheet" />
+
+</head>
+<body class="bg-light">
+    <header class="bg-white">
+        <div class=" container ">
+            @*top Bar*@
+            <div class="py-2 px-3 border-bottom border-light d-flex align-items-center  justify-content-between">
+                <div>
+                    <a asp-page="cart" class="cursor-pointer position-relative">
+                        <i class="bi bi-cart text-dark"></i>
+                        <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-primary xx-smal" style="padding: 0.15rem 0.34rem;top:0.2rem;">
+                            @Model.CartCount
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+
+                    </a>
+                </div>
+
+                <div class="d-none d-md-block">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="login" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">ورود</a>
+                        <span class="ms-1 me-1 x-small">یا</span>
+                        <a asp-page="UserRegister" asp-route-returnUrl="@("~"+Context.Request.Path+Context.Request.QueryString)" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">ثبت نام</a>
+                    }
+                    else
+                    {
+                        <span class="ms-1 me-1 x-small">سلام</span>
+                        <a href="account" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">@User.Claims.Where(w => w.Type == "FirstName").Select(s => s.Value).FirstOrDefault()</a>
+
+                        <span class="ms-1 me-1 x-small">-</span>
+                        <a href="/index?handler=logout" class="text-decoration-none text-danger xx-small cursor-pointer ">خروج</a>
+                    }
+                </div>
+                <a id="burgerMenuButton" onclick="menuButtonClicked()" class="btn border border-light small d-block d-sm-none">
+                    <i class="bi bi-list"></i>
+                </a>
+            </div>
+            @*search bar*@
+            <div class="py-2 px-3 border-bottom border-light d-flex align-items-center justify-content-around ">
+                <img alt="NB Candle" src="~/images/common/logo.png" class="rounded-3 me-2" style="object-fit:cover; height:60px;" />
+                <div class="d-flex justify-content-around align-items-center w-100 bg-light rounded-3 border border-light">
+                    <div class=" d-flex align-items-center justify-content-around position-relative w-100">
+                        <input oninput="searchProduct()" type="text" class="form-control  bg-transparent border-0 " placeholder="جستجو" />
+                        <a class="d-block py-2 px-4 bg-primary text-white rounded-end  small ms-2 cursor-pointer">
+                            <i class="bi bi-search"></i>
+                        </a>
+                        <div id="searchResult" class=" position-absolute bg-white w-100 border border-light rounded-3 overflow-hidden" style="z-index:3000; top:40px;left:0;">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @*nav bar desktop*@
+            <nav class="d-none d-sm-block ">
+                <div class="py-2 px-3 nb-nav-lvl1">
+                    <a href="/index" class="btn small dsk-menu-btn">
+                        <span class="small fw-bold">خانه</span>
+                    </a>
+                    <div class=" d-inline-block dsk-menu-btn">
+                        <a class="btn small ">
+                            <span class="small ">محصولات</span>
+                            <i class="bi bi-caret-down-fill x-small text-primary"></i>
+                        </a>
+                        <div class="py-1 px-3 border-top border-light d-none nb-nav-lvl2 position-absolute vw-100 bg-white" style="left:0; z-index:1010;">
+                            <div class="container">
+                                @foreach (var category in Model.Categories.Where(w => w.ParentCategoryId == null))
+                                {
+                                    if (category.Childrens.Count() == 0)
+                                    {
+                                        <a asp-page="product" asp-route-categoryId="@(category.ID)" class="btn small ">
+                                            <span class="small ">@category.Name</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-inline-block dsk-menu-btn2">
+                                            <a class="btn small ">
+                                                <span class="small ">@category.Name</span>
+                                                <i class="bi bi-caret-down-fill x-small text-primary"></i>
+                                            </a>
+                                            <div class="py-1 px-3 border-top border-light d-none nb-nav-lvl3 position-absolute vw-100 bg-white" style="left:0; z-index:1010;">
+                                                <div class="container">
+                                                    @foreach (var category2 in category.Childrens)
+                                                    {
+                                                        <a asp-page="product" asp-route-categoryId="@(category2.ID)" class="btn small ">
+                                                            <span class="small ">@category2.Name</span>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" d-inline-block dsk-menu-btn">
+                        <a class="btn small ">
+                            <span class="small ">قالب شمع</span>
+                            <i class="bi bi-caret-down-fill x-small text-primary"></i>
+                        </a>
+                        <div class="py-1 px-3 border-top border-light d-none nb-nav-lvl2 position-absolute vw-100 bg-white" style="left:0; z-index:1010;">
+                            <div class="container">
+                                @foreach (var category in Model.MoldCategories.Where(w => w.ParentCategoryId == null))
+                                {
+                                    if (category.Childrens.Count() == 0)
+                                    {
+                                        <a asp-page="product" asp-route-categoryId="@(category.ID)" asp-route-productType="1" class="btn small ">
+                                            <span class="small ">@category.Name</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-inline-block dsk-menu-btn2">
+                                            <a class="btn small ">
+                                                <span class="small ">@category.Name</span>
+                                                <i class="bi bi-caret-down-fill x-small text-primary"></i>
+                                            </a>
+                                            <div class="py-1 px-3 border-top border-light d-none nb-nav-lvl3 position-absolute vw-100 bg-white" style="left:0; z-index:1010;">
+                                                <div class="container">
+                                                    @foreach (var category2 in category.Childrens)
+                                                    {
+                                                        <a asp-page="product" asp-route-categoryId="@(category2.ID)" asp-route-productType="1" class="btn small ">
+                                                            <span class="small ">@category2.Name</span>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/education" class="btn small dsk-menu-btn">
+                        <span class="small ">آموزش</span>
+                    </a>
+                    <a href="/contactus" class="btn small dsk-menu-btn">
+                        <span class="small ">ارتباط با ما</span>
+                    </a>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <a href="myorders" class="btn small dsk-menu-btn">
+                            <span class="small ">سفارشات من</span>
+                        </a>
+                    }
+                </div>
+
+            </nav>
+            @*nav bar mobile*@
+            <nav id="mobileNavBar" class="d-none position-fixed bottom-0 w-100 bg-white px-3 " style="height:80%; right:0; z-index:2100; border-top-left-radius:25px;border-top-right-radius:25px; ">
+                <div class="py-3 border-bottom border-light">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="login" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">ورود</a>
+                        <span class="ms-1 me-1 x-small">یا</span>
+                        <a href="userregister" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">ثبت نام</a>
+                    }
+                    else
+                    {
+                        <span class="ms-1 me-1 x-small">سلام</span>
+                        <a href="account" class="text-decoration-none text-primary x-small cursor-pointer fw-bold">@User.Claims.Where(w => w.Type == "FirstName").Select(s => s.Value).FirstOrDefault()</a>
+                    }
+                </div>
+                <div class="overflow-scroll h-100">
+                    <a href="/index" class="btn small d-block text-start py-2">
+                        <span class="small fw-bold">خانه</span>
+                    </a>
+                    <a onclick="toggleMobileCategory()" class="btn small d-block text-start py-2 d-flex justify-content-between align-items-center">
+                        <span class="small ">انواع شمع</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                    <div class="d-none ps-3 " style="background-color:#efefef;">
+                        @foreach (var category in Model.Categories.Where(w => w.ParentCategoryId == null))
+                        {
+                            if (category.Childrens.Count() == 0)
+                            {
+                                <a asp-page="product" asp-route-categoryId="@(category.ID)" class="btn small d-block text-start py-2 ">
+                                    <span class="small ">@category.Name</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a onclick="toggleMobileCategory()" class="btn small d-block text-start py-2 d-flex justify-content-between align-items-center">
+                                    <span class="small ">@category.Name</span>
+                                    <i class="bi bi-chevron-down"></i>
+                                </a>
+                                <div class="d-none ps-3" style="background-color:#dddddd;">
+                                    @foreach (var category2 in category.Childrens)
+                                    {
+                                        <a asp-page="product" asp-route-categoryId="@(category2.ID)" class="btn small  d-block text-start py-2">
+                                            <span class="small ">@category2.Name</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a onclick="toggleMobileCategory()" class="btn small d-block text-start py-2 d-flex justify-content-between align-items-center">
+                        <span class="small ">قالب سیلیکنی</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                    <div class="d-none ps-3 " style="background-color:#efefef;">
+                        @foreach (var category in Model.MoldCategories.Where(w => w.ParentCategoryId == null))
+                        {
+                            if (category.Childrens.Count() == 0)
+                            {
+                                <a asp-page="product" asp-route-categoryId="@(category.ID)" asp-route-productType="1" class="btn small d-block text-start py-2 ">
+                                    <span class="small ">@category.Name</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a onclick="toggleMobileCategory()" class="btn small d-block text-start py-2 d-flex justify-content-between align-items-center">
+                                    <span class="small ">@category.Name</span>
+                                    <i class="bi bi-chevron-down"></i>
+                                </a>
+                                <div class="d-none ps-3" style="background-color:#dddddd;">
+                                    @foreach (var category2 in category.Childrens)
+                                    {
+                                        <a asp-page="product" asp-route-categoryId="@(category2.ID)" asp-route-productType="1" class="btn small  d-block text-start py-2">
+                                            <span class="small ">@category2.Name</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a href="/education" class="btn small d-block text-start py-2">
+                        <span class="small ">آموزش</span>
+                    </a>
+                    <a href="/contactus" class="btn small d-block text-start py-2">
+                        <span class="small ">ارتباط با ما</span>
+                    </a>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <a href="myorders" class="btn small d-block text-start py-2">
+                            <span class="small ">سفارشات من</span>
+                        </a>
+                    }
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div>
+        <main role="main" class="container mt-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-dark mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-4 border-bottom border-light">
+                    <a href="/index" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">خانه</a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-page="login" asp-route-returnUrl="@("~"+Context.Request.Path+Context.Request.QueryString)" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">ورود</a>
+                        <a asp-page="UserRegister" asp-route-returnUrl="@("~"+Context.Request.Path+Context.Request.QueryString)" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">ثبت نام</a>
+
+                    }
+
+                    else
+                    {
+                        <a href="/account" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">حساب کاربری</a>
+                        <a href="/index?handler=logout" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">خروج</a>
+                    }
+                    <a href="/education" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">آموزش</a>
+                    <a href="/contactus" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">ارتباط با ما</a>
+                </div>
+
+                <div class="col-12 col-lg-4 border-bottom border-light">
+                    @foreach (var item in Model.Categories.Where(w => w.IsActive && w.Childrens.Count() == 0).OrderBy(o => o.Sequence).Take(5))
+                    {
+                        <a asp-page="product" asp-route-categoryId="@(item.ID)" class="d-block pt-3 pb-3 small text-white fw-bold text-decoration-none">@(item.Name)</a>
+                    }
+                </div>
+
+                <div class="col-12 col-lg-4 border-bottom border-light">
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <img src="~/images/common/logo.png" class="rounded-3 h-50 w-50" />
+                    </div>
+                </div>
+                <div class="col-12 border-bottom">
+                    <div class="pt-2 pb-2 d-flex justify-content-between align-items-center" >
+                        <div style="height:32px;">
+                            <a href="https://www.instagram.com/nbcandle/" >
+                                <img src="~/images/common/instagram-logo.png" class="rounded-3 h-100 "/>
+                            </a>
+                            <img src="~/images/common/whatsapp-logo.png" class="rounded-3 h-100 "/>
+                        </div>
+                        <div>
+                            <span class="fw-bold text-white small ">شماره تماس :</span>
+                            <span class="fw-bold text-white small ">09124407580</span>
+                        </div>
+                    </div>
+                </div>
+              <div class="col-12">
+                  <span class="pt-2 pb-2 small text-white text-center w-100 d-block">تمامی حقوق این وب‌سایت متعلق به شرکت شمع سازی ان بی کندل است</span>
+              </div>
+
+
+            </div>
+
+
+        </div>
+    </footer>
+    <div id="blackScreen" class="d-none position-fixed top-0 bg-dark vh-100 vw-100" style="left:0; opacity:.8;z-index:2000;">
+
+    </div>
+    <script src="~/lib/Bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/Bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/layout.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

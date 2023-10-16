@@ -1,0 +1,52 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.UserRegisterModel
+@{
+}
+<div class="d-flex justify-content-center align-items-center w-100">
+    <div class="bg-white rounded-3 p-3 w-100">
+        <span class="d-block w-100 border-bottom border-light pb-2 small fw-bold text-start">ثبت نام کاربر</span>
+        <form method="post"asp-route-returnUrl="@(ViewData["returnUrl"])" >
+            <div class="row pt-3 g-3 border-bottom border-light pb-3">
+                <div class="x-small text-danger" asp-validation-summary="ModelOnly" >
+                    
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="text" class="form-control direction-rtl" asp-for="UserVM.FirstName" placeholder=" ">
+                    <label asp-for="UserVM.FirstName" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.FirstName" class="xx-small text-danger"></span>
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="text" class="form-control direction-rtl" asp-for="UserVM.LastName" placeholder=" ">
+                    <label asp-for="UserVM.LastName" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.LastName" class="xx-small text-danger"></span>
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="number" class="form-control direction-rtl" asp-for="UserVM.Username" placeholder=" ">
+                    <label asp-for="UserVM.Username" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.Username" class="xx-small text-danger"></span>
+                </div>
+                @*<div class="form-floating  col-12 col-md-6">
+                    <input type="number" class="form-control direction-rtl" asp-for="UserVM.PhoneNumber" placeholder=" ">
+                    <label asp-for="UserVM.PhoneNumber" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.PhoneNumber" class="xx-small text-danger"></span>
+                </div>*@
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="password" class="form-control direction-rtl" asp-for="UserVM.Password" placeholder=" ">
+                    <label asp-for="UserVM.Password" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.Password" class="xx-small text-danger"></span>
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="password" class="form-control direction-rtl" asp-for="UserVM.PasswordReEnter" placeholder=" ">
+                    <label asp-for="UserVM.PasswordReEnter" class="x-small ms-2"></label>
+                    <span asp-validation-for="UserVM.PasswordReEnter" class="xx-small text-danger"></span>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-primary x-small" type="submit">
+                    ثبت نام
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>

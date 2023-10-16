@@ -1,0 +1,69 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Product.ColorsModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">رنگ کالا</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form id="colorList" method="post" class="row pt-2 g-3">
+                <input hidden asp-for="SelectedIds" />
+                @foreach (var color in Model.ColorProduct)
+                {
+                    <div  class="col-6 col-lg-3">
+                        @if (color.ColorType == Data.Enums.ColorType.color)
+                        {
+                            <span data-id="@(color.ID)" @(color.IsSelected?"data-selected=true":"data-selected=false") onclick="selectProductColor()" class="p-4 rounded-3 me-2 border border-4 @(color.IsSelected?"border-success":"border-light") d-inline-block" style="background-color: @(color.ColorCode)"></span>
+                        }
+                        else
+                        {
+                            <img data-id="@(color.ID)" @(color.IsSelected?"data-selected=true":"data-selected=false") onclick="selectProductColor()" class="d-inline-block me-2 rounded-3 border border-4 @(color.IsSelected?"border-success":"border-light") " style="object-fit:contain;height:3.4rem;width:3.4rem;" src="@(color.ImageUrl)" />
+                        }
+                    </div>
+                }
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-outline-primary x-small">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    function selectProductColor() {
+        let elem = event.currentTarget;
+        if (elem.getAttribute('data-selected') == 'true') {
+            elem.setAttribute('data-selected', 'false');
+            elem.classList.remove('border-success')
+            elem.classList.add('border-light')
+        }
+        else {
+            elem.setAttribute('data-selected', 'true');
+            elem.classList.add('border-success')
+            elem.classList.remove('border-light')
+        }
+        fillIdsInput();
+    }
+
+    function fillIdsInput() {
+        let input = document.getElementById('SelectedIds');
+        input.value = '';
+        Array.from(document.getElementById('colorList').querySelectorAll('*')).filter(f => f.nodeType != 3 && (f.nodeName == 'SPAN' || f.nodeName == 'IMG')).forEach((item) => {
+            if (item.getAttribute('data-selected') == 'true') {
+                console.log('here')
+                input.value+=item.getAttribute('data-id')+','
+            }
+        })
+    }
+</script>
+}

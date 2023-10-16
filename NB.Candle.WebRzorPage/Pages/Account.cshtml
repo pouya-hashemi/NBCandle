@@ -1,0 +1,40 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.AccountModel
+@{
+}
+<div class="bg-white rounded-3 p-3">
+    <span class="d-block small fw-bold pb-2 border-bottom border-light mb-2">مشخصات کابر</span>
+    <form method="post" class="row">
+        <div class="col-12 col-lg6 mb-2">
+            <div class="form-floating  ">
+                <input type="text" class="form-control direction-rtl" asp-for="Account.FirstName" placeholder=" ">
+                <label asp-for="Account.FirstName" class="x-small ms-2"></label>
+                <span asp-validation-for="Account.FirstName" class="xx-small text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-lg6 mb-2">
+            <div class="form-floating  ">
+                <input type="text" class="form-control direction-rtl" asp-for="Account.LastName" placeholder=" ">
+                <label asp-for="Account.LastName" class="x-small ms-2"></label>
+                <span asp-validation-for="Account.LastName" class="xx-small text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-lg6 mb-2">
+            <div class="form-floating  ">
+                <input type="text" class="form-control direction-rtl" asp-for="Account.Address" placeholder=" ">
+                <label asp-for="Account.Address" class="x-small ms-2"></label>
+                <span asp-validation-for="Account.Address" class="xx-small text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-lg6 mb-2">
+            <div class="form-floating  ">
+                <input type="number" class="form-control direction-rtl" asp-for="Account.PostalCode" placeholder=" ">
+                <label asp-for="Account.PostalCode" class="x-small ms-2"></label>
+                <span asp-validation-for="Account.PostalCode" class="xx-small text-danger"></span>
+            </div>
+        </div>
+        <div class=" col-12">
+            <button type="submit" class="btn btn-outline-primary small">ثبت تغییرات</button>
+        </div>
+    </form>
+</div>

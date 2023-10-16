@@ -1,0 +1,38 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.ProductImage.DeleteModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">حذف تصویر کالا</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index"  asp-route-productid="@(Model.Image.ProductId)">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <div class="row pt-2 pb-2">
+                <div class="x-small text-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Image.Url" class="x-small fw-bold "></label>
+                    <img src="@(Model.Image.Url)" class="rounded-3" style="height:250px;width:300px;object-fit:contain;" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="border-top  border-light pt-2 pb-2 ">
+                    <i class="bi bi-asterisk text-danger"></i>
+                    <span class="x-small">آیا از حذف این آیتم اطمینان دارید؟ </span>
+                </div>
+            </div>
+            <form method="post" class="col-12">
+                <input asp-for="Image.ID" hidden />
+                <button type="submit" class="btn btn-danger x-small ">حذف آیتم</button>
+                <a asp-page="index" asp-route-ProductId="@Model.Image.ProductId" class="btn btn-outline-primary x-small">انصراف</a>
+            </form>
+        </div>
+    </div>
+</div>

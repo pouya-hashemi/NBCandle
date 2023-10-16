@@ -1,0 +1,217 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.ProductDetailModel
+@{
+
+    ViewData["Title"] = "خرید " + Model.Product.Name;
+    ViewData["description"] = "خرید " + Model.Product.Name + "شروع قیمت از " + Model.Product.ProductProperties.Min(s => s.Price) + " ریال";
+}
+<div class="row"  itemscope itemtype="http://schema.org/Product">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-3">
+            <div class="row">
+                <div class="col-12 col-lg-5">
+                    <h1 itemprop="name" class="pb-2 border-bottom border-light">خرید @Model.Product.Name</h1>
+                    <div id="propertyList">
+                        @foreach (var property in Model.Product.ProductProperties)
+                        {
+                            <div data-id="@(property.ID)" onclick="changeSelectedProperty()" class="border border-light rounded-3 p-2 cursor-pointer mb-1 ">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start align-items-center flex-wrap">
+                                            <div class="me-4">
+                                                <span class="fw-bold x-small">طول:</span>
+                                                <span itemprop="height" class=" x-small">@property.Height</span>
+                                            </div>
+                                            <div class="me-4">
+                                                <span class="fw-bold x-small">عرض:</span>
+                                                <span itemprop="width" class=" x-small">@property.Width</span>
+                                            </div>
+                                            <div class="me-4">
+                                                <span class="fw-bold x-small">قطر:</span>
+                                                <span  class=" x-small">@property.Diameter</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <span  class="fw-bold x-small">قیمت:</span>
+                                        @if (Model.Product.NormalDiscount != null)
+                                        {
+                                            <span class=" x-small text-decoration-line-through"> @(String.Format("{0:n0}", property.Price))</span>
+                                            <span class="x-small badge bg-danger">@(Model.Product.NormalDiscount.DiscountPercentage)%</span>
+                                            <span itemprop="price" class=" x-small fw-bold "> @(String.Format("{0:n0}", property.Price*(100-Model.Product.NormalDiscount.DiscountPercentage)/100))</span>
+                                        }
+                                        else
+                                        {
+                                            <span itemprop="price" class=" x-small"> @(String.Format("{0:n0}", property.Price))</span>
+                                        }
+                                        <span itemprop="priceCurrency" class=" x-small">ریال</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                    <form method="post">
+                        <div class="small fw-bold text-danger" asp-validation-summary="ModelOnly">
+
+                        </div>
+                        <input asp-for="AddToCart.ProductId" hidden />
+                        @if (Model.Product.IsFreeSize)
+                        {
+
+                            <div class="border-bottom border-light pb-2 pt-2 ">
+                                <div class="d-flex align-items-center mb-2">
+                                    <input id="isCustomSizeInput" onchange="customSizeChanged()" class="direction-rtl" type="checkbox" asp-for="AddToCart.IsCustomeSize">
+                                    <label asp-for="AddToCart.IsCustomeSize" class="x-small ms-2"></label>
+                                </div>
+                                <div id="customPropertySection" class="d-none">
+                                    <div class="form-floating  mb-1">
+                                        <input type="number" min="0" class="form-control direction-rtl" asp-for="AddToCart.Height" placeholder=" ">
+                                        <label asp-for="AddToCart.Height" class="x-small ms-2"></label>
+                                        <span asp-validation-for="AddToCart.Height" class="xx-small text-danger"></span>
+                                    </div>
+
+                                    @*<div class="form-floating mb-1">
+                                            <input type="number" min="0" class="form-control direction-rtl" asp-for="AddToCart.Width" placeholder=" ">
+                                            <label asp-for="AddToCart.Width" class="x-small ms-2"></label>
+                                            <span asp-validation-for="AddToCart.Width" class="xx-small text-danger"></span>
+                                        </div>
+
+                                        <div class="form-floating  ">
+                                            <input type="number" min="0" class="form-control direction-rtl" asp-for="AddToCart.Diameter" placeholder=" ">
+                                            <label asp-for="AddToCart.Diameter" class="x-small ms-2"></label>
+                                            <span asp-validation-for="AddToCart.Diameter" class="xx-small text-danger"></span>
+                                        </div>*@
+                                </div>
+                            </div>
+                        }
+                        @if (Model.Product.ProductType != Data.Enums.ProductType.mold)
+                        {
+
+                            <div class="mt-3">
+                                <input hidden asp-for="AddToCart.ColorId" />
+                                <label asp-for="AddToCart.ColorId" class="d-block fw-bold x-small mb-2"></label>
+                                <div id="colorList" class="d-flex justify-content-start align-items-center">
+                                    @foreach (var color in Model.Product.Colors)
+                                    {
+                                        if (color.ColorType == Data.Enums.ColorType.color)
+                                        {
+                                            <span itemprop="color" data-id="@(color.ID)" onclick="selectColor()" class="cursor-pointer d-inline-block border border-light me-2 p-3 rounded-3 " style="background-color:@(color.ColorCode) ;"></span>
+                                        }
+                                        else
+                                        {
+                                            <img itemprop="color" alt="@(color.DisplayName)" data-id="@(color.ID)" class="d-inline-block cursor-pointer me-2 rounded-3 border border-light " onclick="selectColor()" style="object-fit:contain;height:2rem;width:2rem;" src="@(color.ImageUrl)" />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="mt-3">
+                            <input type="text" asp-for="AddToCart.FixedProductPropertyId" hidden />
+                            <div class="form-floating  ">
+                                <input type="number" min="1" value="1" class="form-control direction-rtl" asp-for="AddToCart.Quantity" placeholder=" ">
+                                <label asp-for="AddToCart.Quantity" class="x-small ms-2"></label>
+                                <span asp-validation-for="AddToCart.Quantity" class="xx-small text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary small mt-3 d-block w-100">
+                                افزودن به سبد
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-lg-7">
+                    <img itemprop="image" id="mainImage" class="rounded-3 w-100" src="@Model.Product.ProductImages.Where(w=>w.IsMain).Select(s=>s.Url).FirstOrDefault()" style="object-fit:contain; height:400px;" />
+                    <div id="imageList" class="p-3 d-flex overflow-auto w-100 border-top border-light">
+                        @foreach (var image in Model.Product.ProductImages.OrderByDescending(o => o.IsMain))
+                        {
+                            <img itemprop="image"  onclick="imageSwap()" class="rounded-3 me-1 ms-1 d-inline-bloc  cursor-pointer   @(image.IsMain?"border border-4 border-success":"")" src="@image.Url" style="object-fit:cover; max-height:100px;" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let value = document.getElementById('isCustomSizeInput').checked;
+    preparePage(value);
+
+    function imageSwap() {
+        let selectedImage = event.currentTarget;
+        document.getElementById('mainImage').src = selectedImage.src;
+        let prevselectedImage = Array.from(document.getElementById('imageList').childNodes).filter(f => f.nodeType != 3).find(f => f.classList.contains('border'));
+        prevselectedImage.classList.remove('border')
+        prevselectedImage.classList.remove('border-4')
+        prevselectedImage.classList.remove('border-success')
+
+        selectedImage.classList.add('border')
+        selectedImage.classList.add('border-4')
+        selectedImage.classList.add('border-success')
+    }
+
+    function changeSelectedProperty() {
+        let selectedProperty = event.currentTarget;
+        if (event.currentTarget.getAttribute('disabled') == 'disabled') {
+            return;
+        }
+
+        clearSelectedProperty();
+
+        selectedProperty.classList.add('border-success')
+        selectedProperty.classList.add('border-2')
+        selectedProperty.classList.remove('border-light')
+        console.log(selectedProperty.getAttribute('data-id'));
+
+        document.getElementById('AddToCart_FixedProductPropertyId').value = selectedProperty.getAttribute('data-id')
+    }
+
+    function clearSelectedProperty() {
+        let prevSelectedProperty = Array.from(document.getElementById('propertyList').childNodes).filter(f => f.nodeType != 3).find(f => f.classList.contains('border-success'));
+        if (typeof (prevSelectedProperty) != 'undefined') {
+            prevSelectedProperty.classList.remove('border-success')
+            prevSelectedProperty.classList.remove('border-2')
+            prevSelectedProperty.classList.add('border-light')
+        }
+        document.getElementById('AddToCart_FixedProductPropertyId').value = null;
+    }
+
+    function customSizeChanged() {
+
+        let value = event.currentTarget.checked;
+        preparePage(value)
+    }
+    function preparePage(value) {
+        let customList = document.getElementById('customPropertySection');
+        if (value) {
+            customList.classList.add('d-block')
+            customList.classList.remove('d-none')
+            clearSelectedProperty();
+            Array.from(document.getElementById('propertyList').childNodes).filter(f => f.nodeType != 3).forEach((item) => { item.setAttribute('disabled', 'disabled') })
+        }
+        else {
+            customList.classList.remove('d-block')
+            customList.classList.add('d-none')
+            Array.from(document.getElementById('propertyList').childNodes).filter(f => f.nodeType != 3).forEach((item) => { item.removeAttribute('disabled') })
+        }
+    }
+
+    function selectColor() {
+        deSelectAllColors();
+        let selectedColor = event.currentTarget;
+        selectedColor.classList.remove('border-light')
+        selectedColor.classList.add('border-success')
+        selectedColor.classList.add('border-3')
+        document.getElementById('AddToCart_ColorId').value = selectedColor.getAttribute('data-id')
+    }
+    function deSelectAllColors() {
+        let list = document.getElementById('colorList');
+        let colors = Array.from(list.childNodes).filter(f => f.nodeType != 3);
+        colors.forEach((color) => {
+            color.classList.remove('border-success')
+            color.classList.remove('border-3')
+            color.classList.remove('border-light')
+            color.classList.add('border-light')
+        })
+        document.getElementById('AddToCart_ColorId').value = null;
+    }
+</script>

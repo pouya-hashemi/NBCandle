@@ -1,0 +1,45 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.ProductImage.UpdateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">ویرایش تصویر کالا</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index"  asp-route-productid="@(Model.Image.ProductId)">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" class="row pt-2 g-3" enctype="multipart/form-data">
+                <input asp-for="Image.ID" hidden />
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input class="form-control" type="file" asp-for="Image.Image">
+                        <label asp-for="Image.Image" class="x-small ms-2"></label>
+                        <span asp-validation-for="Image.Image" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Image.IsMain" class="x-small ms-2"></label>
+                    <input class="direction-rtl" type="checkbox" asp-for="Image.IsMain">
+                    <span asp-validation-for="Image.IsMain" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Image.IsActive" class="x-small ms-2"></label>
+                    <input class="direction-rtl" type="checkbox" asp-for="Image.IsActive">
+                    <span asp-validation-for="Image.IsActive" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

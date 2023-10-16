@@ -1,0 +1,59 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Colors.CreateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">رنگ جدید</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="row pt-2 g-3">
+
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" min="0" class="form-control direction-rtl" asp-for="Color.DisplayName" placeholder=" ">
+                        <label asp-for="Color.DisplayName" class="x-small ms-2"></label>
+                        <span asp-validation-for="Color.DisplayName" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" asp-for="Color.ColorType" asp-items="Model.ColorTypeItems">
+                        </select>
+                        <label asp-for="Color.ColorType" class="x-small ms-2"></label>
+                    </div>
+                    <span asp-validation-for="Color.ColorType" class="xx-small text-danger"></span>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" min="0" class="form-control direction-rtl" asp-for="Color.ColorCode" placeholder=" ">
+                        <label asp-for="Color.ColorCode" class="x-small ms-2"></label>
+                        <span asp-validation-for="Color.ColorCode" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input class="form-control" type="file" asp-for="Color.Image">
+                        <label asp-for="Color.Image" class="x-small ms-2"></label>
+                        <span asp-validation-for="Color.Image" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

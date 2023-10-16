@@ -1,0 +1,38 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Colors.DeleteModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">حذف رنگ</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <div class="row pt-2 pb-2">
+                <div class="x-small text-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Color.DisplayName" class="x-small fw-bold "></label>
+                    <span class="small ">@Model.Color.DisplayName</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="border-top  border-light pt-2 pb-2 ">
+                    <i class="bi bi-asterisk text-danger"></i>
+                    <span class="x-small">آیا از حذف این آیتم اطمینان دارید؟ </span>
+                </div>
+            </div>
+            <form method="post" class="col-12">
+                <input asp-for="Color.ID" hidden />
+                <button type="submit" class="btn btn-danger x-small ">حذف آیتم</button>
+                <a asp-page="index" class="btn btn-outline-primary x-small">انصراف</a>
+            </form>
+        </div>
+    </div>
+</div>

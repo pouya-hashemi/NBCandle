@@ -1,0 +1,165 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.MyOrdersModel
+@using NB.Candle.WebRzorPage.Common;
+@{
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-3">
+            @foreach (var orderMaster in Model.OrderMasters)
+            {
+                <div class="border border-light rounded-3 p-2  mb-2 ">
+                    <div onclick="toggleOrderDetail()" class="d-flex align-items-center justify-content-between cursor-pointer ">
+                        <div class="row w-100">
+                            <div class="col-12 col-lg-4">
+                                <span class="x-small fw-bold">شماره سفارش:</span>
+                                <span class="x-small">@orderMaster.OrderNumber</span>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <span class="x-small fw-bold">مبلغ سفارش:</span>
+                                <span class="x-small">@(String.Format("{0:n0}",(orderMaster.TotalAmount))) ریال</span>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <span class="x-small fw-bold">تاریخ سفارش:</span>
+                                <span class="x-small">@orderMaster.SubmitDate.PersianDateFormatString()</span>
+                            </div>
+
+
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="orderDetail d-none border-top border-light mt-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 p-2">
+                                <div>
+                                    <span class="xx-small fw-bold">تحویل گیرنده:</span>
+                                    <span class="xx-small">@orderMaster.ShippingFullName</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">آدرس:</span>
+                                    <span class="xx-small">@orderMaster.ShippingAddreess</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">شماره تماس:</span>
+                                    <span class="xx-small">@orderMaster.ShippingPhoneNumber</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">کد پستی:</span>
+                                    <span class="xx-small">@orderMaster.PostalCode</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">نحوه ارسال:</span>
+                                    <span class="xx-small">@orderMaster.ShippingMethod.Name</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">تاریخ تحویل به @(orderMaster.ShippingMethod.Name):</span>
+                                    <span class="xx-small">@(orderMaster.EstimatedDeliveryDate.PersianDateFormatString())</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">کد پیگیری سفارش از @(orderMaster.ShippingMethod.Name) :</span>
+                                    <span class="xx-small">@orderMaster.TraceNumber</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">وضعیت سفارش:</span>
+                                    <span class="xx-small">@orderMaster.OrderStatus</span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 p-2">
+                                <div>
+                                    <span class="xx-small fw-bold">مبلغ کل:</span>
+                                    <span class="xx-small">@(String.Format("{0:n0}",(orderMaster.TotalProductAmount))) ریال</span>
+                                </div>
+                                <div class="text-danger">
+                                    <span class="xx-small fw-bold">مبلغ تخفیفات:</span>
+                                    <span class="xx-small">@(String.Format("{0:n0}",(orderMaster.TotalDiscountAmount))) ریال</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">مبلغ مالیات:</span>
+                                    <span class="xx-small">@(String.Format("{0:n0}",(orderMaster.TaxAmount))) ریال</span>
+                                </div>
+                                <div>
+                                    <span class="xx-small fw-bold">هزینه ارسال:</span>
+                                    <span class="xx-small">@(String.Format("{0:n0}",(orderMaster.ShippingCost))) ریال</span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 p-2 h-100">
+                                <div class="overflow-auto border border-light  p-2 rounded-3" style="max-height:300px">
+                                    @foreach (var item in orderMaster.OrderItems)
+                                    {
+                                        <div class="pt-2 pb-2 border-bottom border-light d-flex justify-content-start align-items-center w-100">
+                                            <img src="@(item.Product.ProductImages.Select(s=>s.Url).FirstOrDefault())" class="rounded-3 me-2" style="height:90px;width:90px;object-fit:contain;" />
+                                            <div class="w-100">
+                                                <span class="small fw-bold d-block w-100">@item.Product.Name</span>
+
+                                                <span class="xx-small fw-bold">طول</span>
+                                                <span class="xx-small ">@item.ProductProperty.Height</span>
+
+                                                <span class="xx-small fw-bold">عرض</span>
+                                                <span class="xx-small ">@item.ProductProperty.Width</span>
+
+                                                <span class="xx-small fw-bold">قطر</span>
+                                                <span class="xx-small ">@item.ProductProperty.Diameter</span>
+                                                @if (item.Color != null)
+                                                {
+                                                    <div class="d-flex align-items-center align-items-center">
+                                                        <span class="xx-small fw-bold me-2">رنگ:</span>
+                                                        @if (item.Color.ColorType == Data.Enums.ColorType.color)
+                                                        {
+                                                            <span class="p-2 rounded-3 me-2 border border-light d-inline-block" style="background-color: @(item.Color.ColorCode)"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="d-inline-block me-2 rounded-3 border border-light " style="object-fit:contain;height:2rem;width:2rem;" src="@(item.Color.ImageUrl)" />
+                                                        }
+                                                        @*<span class="p-2 rounded-3 border border-light d-inline-block" style="background-color: @(item.Color.ColorCode)"></span>*@
+                                                    </div>
+                                                }
+                                                <div>
+                                                    <span class="xx-small fw-bold">تعداد:</span>
+                                                    <span class="xx-small ">@item.Quantity</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="x-small fw-bold">مبلغ:</span>
+                                                        <span class="x-small ">@(String.Format("{0:n0}",(item.ProductProperty.Price * item.Quantity))) ریال</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.OrderMasters.Count() == 0)
+            {
+                <span class="text-primary d-block w-100 x-small text-center">تاکنون سفارشی ثبت نکرده اید!!!</span>
+                <div class="d-flex justify-content-center align-items-center mt-2">
+                    <a asp-page="product" asp-route-categoryId="@(Model.FirstCategoryId)" class="btn btn-outline-primary x-small ">
+                        شروع خرید
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        function toggleOrderDetail() {
+            let orderListElem = Array.from(event.currentTarget.parentElement.childNodes).filter(f => f.nodeType != 3).find(f => f.classList.contains('orderDetail'))
+            if (orderListElem.classList.contains('d-none')) {
+                orderListElem.classList.remove('d-none')
+                orderListElem.classList.add('d-block')
+            }
+            else {
+                orderListElem.classList.add('d-none')
+                orderListElem.classList.remove('d-block')
+            }
+        }
+    </script>
+}

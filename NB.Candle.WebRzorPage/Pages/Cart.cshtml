@@ -1,0 +1,223 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.CartModel
+@{
+}
+<div class="row">
+    <div class="col-12 col-lg-4 mb-2">
+        <div class="bg-white p-3 pt-0 rounded-3">
+            <span class="d-block border-bottom border-light small fw-bold pt-2 pb-2">سبد خرید</span>
+            @foreach (var item in Model.CartItems)
+            {
+                <div class=" pb-2 pt-2 border-bottom border-light d-flex justify-content-start align-items-center w-100">
+                    <img src="@(item.Product.ProductImages.Select(s=>s.Url).FirstOrDefault())" class="rounded-3 me-2" style="height:90px;width:90px;object-fit:contain;" />
+                    <div class="w-100">
+                        <span class="small fw-bold d-block w-100">@item.Product.Name</span>
+
+                        <span class="xx-small fw-bold">طول</span>
+                        <span class="xx-small ">@item.ProductProperty.Height</span>
+
+                        <span class="xx-small fw-bold">عرض</span>
+                        <span class="xx-small ">@item.ProductProperty.Width</span>
+
+                        <span class="xx-small fw-bold">قطر</span>
+                        <span class="xx-small ">@item.ProductProperty.Diameter</span>
+
+                        @if (item.Color != null)
+                        {
+                            <div class="d-flex align-items-center align-items-center">
+                                <span class="xx-small fw-bold me-2">رنگ:</span>
+                                @if (item.Color.ColorType == Data.Enums.ColorType.color)
+                                {
+                                    <span class="p-2 rounded-3 me-2 border border-light d-inline-block" style="background-color: @(item.Color.ColorCode)"></span>
+                                }
+                                else
+                                {
+                                    <img class="d-inline-block me-2 rounded-3 border border-light " style="object-fit:contain;height:2rem;width:2rem;" src="@(item.Color.ImageUrl)" />
+                                }
+                            </div>
+                        }
+                        <div>
+                            <span class="xx-small fw-bold">تعداد:</span>
+                            <span class="xx-small ">@item.Quantity</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <span class="x-small fw-bold">مبلغ:</span>
+                                @if (item.Product.NormalDiscount != null)
+                                {
+                                    <span class="x-small text-decoration-line-through ">@(String.Format("{0:n0}",(item.ProductProperty.Price * item.Quantity)))</span>
+                                    <span class="x-small badge bg-danger ms-2 me-2">@(item.Product.NormalDiscount.DiscountPercentage)%</span>
+                                    <span class="x-small ">@(String.Format("{0:n0}",(item.ProductProperty.Price * item.Quantity)*(100-item.Product.NormalDiscount.DiscountPercentage)/100))</span>
+                                }
+                                else
+                                {
+                                    <span class="x-small ">@(String.Format("{0:n0}",(item.ProductProperty.Price * item.Quantity)))</span>
+                                }
+                                <span class="x-small">ریال</span>
+                            </div>
+                            <form asp-page-handler="DeleteCartItem" asp-route-Id="@(item.ID)" method="post">
+                                <button type="submit" class="cursor-pointer bg-transparent border-0">
+                                    <i class="bi bi-trash-fill text-danger"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            @if (Model.CartItems.Count() == 0)
+            {
+                <div class="pt-3">
+                    <span class="text-primary d-block w-100 x-small text-center">سبد شما خالی می باشد!!!</span>
+                    <div class="d-flex justify-content-center align-items-center mt-2">
+                        <a asp-page="product" asp-route-categoryId="@(Model.FirstCategoryId)" class="btn btn-outline-primary x-small ">
+                            شروع خرید
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-12 col-lg-4 mb-2">
+        <div class="bg-white p-3 rounded-3">
+            <span class="d-block fw-bold small mb-3">نحوه ارسال</span>
+            <div id="shippingMethodList">
+                @foreach (var shippingMethod in Model.ShippingMethods)
+                {
+                    <form asp-page-handler="ChangeShippingMethod" asp-route-Id="@(shippingMethod.ID)" method="post" onclick="shippingMethodSelected()" class="border  @(shippingMethod.IsSelected ? "border-success" : "border-light") rounded-3 d-flex align-items-center p-2 mb-2 cursor-pointer">
+
+                        <label class="x-small me-2">@shippingMethod.Name</label>
+                        <label class="x-small me-2">@(String.Format("{0:n0}",shippingMethod.Cost)) ریال</label>
+                        @if (!shippingMethod.IsInInvoice)
+                        {
+                            <label class="xx-small me-2">پرداخت درب منزل</label>
+                        }
+                    </form>
+                }
+            </div>
+        </div>
+        <div class="bg-white p-3 rounded-3 mt-2">
+            <form method="post" enctype="multipart/form-data" class="row">
+                <div class="x-small text-danger" asp-validation-summary="ModelOnly">
+
+                </div>
+                <input type="file" onchange="imageUploaded()" asp-for="OrderSubmit.PaymentImage" hidden />
+                <span asp-validation-for="OrderSubmit.PaymentImage" class="xx-small text-danger fw-bold"></span>
+                <div class="col-12 mb-2">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="OrderSubmit.ShippingFullName" placeholder=" ">
+                        <label asp-for="OrderSubmit.ShippingFullName" class="x-small ms-2"></label>
+                        <span asp-validation-for="OrderSubmit.ShippingFullName" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="OrderSubmit.ShippingAddress" placeholder=" ">
+                        <label asp-for="OrderSubmit.ShippingAddress" class="x-small ms-2"></label>
+                        <span asp-validation-for="OrderSubmit.ShippingAddress" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-2">
+                    <div class="form-floating  ">
+                        <input type="number" class="form-control direction-rtl" asp-for="OrderSubmit.PostalCode" placeholder=" ">
+                        <label asp-for="OrderSubmit.PostalCode" class="x-small ms-2"></label>
+                        <span asp-validation-for="OrderSubmit.PostalCode" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-floating  ">
+                        <input type="number" class="form-control direction-rtl" asp-for="OrderSubmit.ShippingPhoneNumber" placeholder=" ">
+                        <label asp-for="OrderSubmit.ShippingPhoneNumber" class="x-small ms-2"></label>
+                        <span asp-validation-for="OrderSubmit.ShippingPhoneNumber" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="OrderSubmit.Description" placeholder=" ">
+                        <label asp-for="OrderSubmit.Description" class="x-small ms-2"></label>
+                        <span asp-validation-for="OrderSubmit.Description" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary x-small" type="submit" @(Model.CartItems.Count() == 0 ? "disabled" : "")>
+                        ثبت نهایی سفارش
+                    </button>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+    <div class="col-12 col-lg-4 mb-2">
+        <div class="bg-white p-3 rounded-3">
+            <div class=" d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-light">
+                <span class="d-block fw-bold small ">پیش فاکتور</span>
+                @if (Model.OrderDiscount != null&& Model.Invoice.OrderDiscountSum>0)
+                {
+                    <span class="d-block fw-bold xx-small text-danger">شامل @(Model.OrderDiscount.DiscountPersentage) % تخفیف سفارش</span>
+                }
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="x-small fw-bold">مبلغ کل</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.ProductSum)) ریال</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2 text-danger">
+                <span class="x-small fw-bold">مبلغ تخفیف</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.DiscountSum)) ریال</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2 text-danger">
+                <span class="x-small fw-bold">مبلغ تخفیف سفارش</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.OrderDiscountSum)) ریال</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="x-small fw-bold">هزینه ارسال</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.ShippingCost)) ریال</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="x-small fw-bold">مالیات</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.TaxAmount)) ریال</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center border-top border-light pt-2">
+                <span class="x-small fw-bold">مبلغ قابل پرداخت</span>
+                <span class="x-small ">@(String.Format("{0:n0}",Model.Invoice.TotalCost)) ریال</span>
+            </div>
+        </div>
+        <div class="bg-white p-3 rounded-3 mt-2">
+            <span class="d-block fw-bold small mb-2 pb-2 border-bottom border-light">پرداخت</span>
+            <span class="x-small mt-2">لطفا مبلغ</span>
+            <span class="x-small fw-bold"> @(String.Format("{0:n0}",Model.Invoice.TotalCost)) ریال</span>
+            <span class="x-small ">را به شماره کارت </span>
+            <span class="x-small fw-bold " style="white-space:nowrap">6221-0610-6654-7375</span>
+            <span class="x-small ">به نام خانم نسیم عسیران واریز نموده و تصویر واریزی را در قسمت پایین آپلود فرمایید </span>
+
+            <a onclick="uploadPaymentImage()" class="btn btn-primary x-small mt-2 d-block">بارگذاری تصویر پرداختی</a>
+            <span id="uploadSuccessful" class="xx-small text-success mt-2 d-none fw-bold"> تصویر با موفقیت بارگذاری شد</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function shippingMethodSelected() {
+            //let list = document.getElementById('shippingMethodList');
+            //Array.from(list.childNodes).filter(f => f.nodeType != 3).forEach((item) => {
+            //    item.classList.remove('border-success')
+            //    item.classList.add('border-light')
+            //})
+            //let selectedItem = event.currentTarget;
+            //selectedItem.classList.remove('border-light')
+            //selectedItem.classList.add('border-success')
+            //document.getElementById('invoiceShippingAmount').innerText = selectedItem.firstElementChild.nextElementSibling.innerText;
+
+            event.currentTarget.submit();
+        }
+        function uploadPaymentImage() {
+            document.getElementById('OrderSubmit_PaymentImage').click();
+        }
+        async function imageUploaded() {
+            document.getElementById('uploadSuccessful').classList.remove('d-none')
+            document.getElementById('uploadSuccessful').classList.add('d-block')
+        }
+    </script>
+}

@@ -1,0 +1,30 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.EducationModel
+@{
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-3">
+            @foreach (var item in Model.Educations)
+            {
+                <div class="border rounded-3 border-light p-2 mb-2">
+                    @if (item.FileType == Data.Enums.FileType.image)
+                    {
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img alt="@(item.Title)" src="@(item.ImageUrl)" class="rounded-3 mw-100" style="height:250px; object-fit:contain;" />
+                        </div>
+                    }
+                    else
+                    {
+
+                        <div class="d-flex justify-content-center align-items-center">
+                            <video src="@(item.ImageUrl.Substring(0))" class="mw-100" controls style="height:250px;" loop />
+                        </div>
+                    }
+                    <h1 class="mt-2">@(item.Title)</h1>
+                    <p class="mt-2">@(item.Description)</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

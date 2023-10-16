@@ -1,0 +1,78 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.OrderDiscount.UpdateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">ویرایش تخفیف سفارش</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" class="row pt-2 g-3" enctype="multipart/form-data">
+                <input asp-for="Discount.ID" hidden />
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="Discount.Title" placeholder=" ">
+                        <label asp-for="Discount.Title" class="x-small ms-2"></label>
+                        <span asp-validation-for="Discount.Title" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="Discount.Description" placeholder=" ">
+                        <label asp-for="Discount.Description" class="x-small ms-2"></label>
+                        <span asp-validation-for="Discount.Description" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="number" class="form-control direction-rtl" asp-for="Discount.FloorAmount" placeholder=" ">
+                        <label asp-for="Discount.FloorAmount" class="x-small ms-2"></label>
+                        <span asp-validation-for="Discount.FloorAmount" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="number" class="form-control direction-rtl" asp-for="Discount.DiscountPercentage" placeholder=" ">
+                        <label asp-for="Discount.DiscountPercentage" class="x-small ms-2"></label>
+                        <span asp-validation-for="Discount.DiscountPercentage" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input class="form-control" type="file" asp-for="Discount.Image">
+                        <label asp-for="Discount.Image" class="x-small ms-2"></label>
+                        <span asp-validation-for="Discount.Image" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Discount.DisplayOnHomePage" class="x-small ms-2"></label>
+                    <input type="checkbox" class=" direction-rtl" asp-for="Discount.DisplayOnHomePage" placeholder=" ">
+                    <span asp-validation-for="Discount.DisplayOnHomePage" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+
+                    <label asp-for="Discount.IsActive" class="x-small ms-2"></label>
+                    <input type="checkbox" class=" direction-rtl" asp-for="Discount.IsActive">
+                    <span asp-validation-for="Discount.IsActive" class="xx-small text-danger"></span>
+
+                </div>
+
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

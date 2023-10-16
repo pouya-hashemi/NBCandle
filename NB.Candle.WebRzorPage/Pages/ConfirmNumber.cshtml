@@ -1,0 +1,22 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.ConfirmNumberModel
+@{
+}
+
+<div class="d-flex justify-content-center align-items-center w-100">
+    <form method="post" class="bg-white rounded-3 p-3 w-100"asp-route-returnUrl="@(ViewData["returnUrl"])">
+        <input asp-for="UserOtpVM.ID"hidden />
+        <div class="x-small text-danger" asp-validation-summary="ModelOnly">
+
+        </div>
+        <span class="d-block w-100 border-bottom border-light pb-2 small fw-bold text-start">تایید شماره تلفن</span>
+        <p class="mt-2 small "> پیامی حاوی کد 5 رقمی برای شما ارسال شد.</p>
+        <div class="form-floating w-25">
+            <input type="number" class="form-control direction-rtl" asp-for="UserOtpVM.OtpCode" placeholder=" ">
+            <label asp-for="UserOtpVM.OtpCode" class="x-small ms-2"></label>
+            <span asp-validation-for="UserOtpVM.OtpCode" class="xx-small text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary small">تایید</button>
+    </form>
+
+</div>

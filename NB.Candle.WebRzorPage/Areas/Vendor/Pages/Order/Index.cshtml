@@ -1,0 +1,147 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Order.IndexModel
+@using NB.Candle.WebRzorPage.Common
+@{
+
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-3 ">
+            <div class="row">
+                <div class="col-12 ">
+                    <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                        <span class="small">سفارشات</span>
+                        <a class="btn btn-link text-danger xx-small" asp-area="Vendor" asp-page="/index">
+                            <span class="xx-small">بازگشت</span>
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </div>
+                </div>
+
+                @*<div class="col-12 mt-2">
+                        <a asp-page="create" asp-route-productId="@Model.Product.ID" class="btn btn-outline-primary x-small d-inline-flex justify-content-center align-items-center">
+                            <i class="bi bi-plus-circle "></i>
+                            <span class="ms-2">جدید</span>
+                        </a>
+                    </div>*@
+                <div class="col-12 overflow-auto">
+                    <div method="post" class="row mt-2">
+                        <div class="col-12 col-lg-6">
+                            <div class="form-floating  ">
+                                <input id="orderSearchText" type="text" class="form-control direction-rtl" name="ordersearch" placeholder=" ">
+                                <label  class="x-small ms-2">جستجو</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <a onclick="loadPage()" asp-page="index" asp-route-pageIndex="1" asp-route-pageSize="10" class="btn btn-primary x-small">جستجو</a>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-striped table-hover table table-responsive table-bordered mt-2 align-middle ">
+                        <thead class=" small">
+                            <tr>
+                                <th style="min-width:40px;" class="text-center" scope="col">نمایش جزئیات</th>
+                                <th style="min-width:40px;" class="text-center" scope="col">ردیف</th>
+                                <th style="min-width:90px;" scope="col">شماره سفارش</th>
+                                <th style="min-width:90px;" scope="col">تاریخ ثبت</th>
+                                <th style="min-width:90px;" scope="col">نام کاربری</th>
+                                <th style="min-width:90px;" scope="col">نام کامل کاربر</th>
+                                <th style="min-width:90px;" scope="col">وضعیت سفارش</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderMaster.Select((property, i) => new { i, property }))
+                            {
+                                <tr>
+                                    <th class="d-flex justify-content-center align-items-center">
+                                        <a class="btn btn-primary xx-small p-1 me-1" asp-page="Detail" asp-route-id="@item.property.ID"><i class="bi bi-info-lg xx-small"></i></a>
+                                        @*<a class="btn btn-primary xx-small p-1 ms-1" asp-page="Delete" asp-route-id="@item.property.ID"><i class="bi bi-trash-fill xx-small"></i></a>*@
+                                    </th>
+                                    <th class="text-center" scope="row">@((item.i +1)+((Model.Pageinate.CurrentPageIndex-1)*Model.Pageinate.CurrentPageSize))</th>
+                                    <td>
+                                        <span class="x-small">@item.property.OrderNumber</span>
+                                    </td>
+                                    <td>
+                                        <span class="x-small">@item.property.SubmitDate.PersianDateFormatString()</span>
+                                    </td>
+                                    <td>
+                                        <span class="x-small">@item.property.Username</span>
+                                    </td>
+                                    <td>
+                                        <span class="x-small">@item.property.UserFullName</span>
+                                    </td>
+                                    <td>
+                                        <span class="x-small">@item.property.OrderStatus</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12">
+                    <nav aria-label="Page navigation ">
+                        <ul class="pagination pagination-sm justify-content-center">
+                            @if (Model.Pageinate.HasPreviousPage)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" onclick="loadPage()" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex-1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link " onclick="loadPage()" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex-1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @if (Model.Pageinate.HasPreviousPage)
+                            {
+                                <li class="page-item"><a onclick="loadPage()" class="page-link" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex-1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)">@(Model.Pageinate.CurrentPageIndex-1)</a></li>
+                            }
+
+                            <li class="page-item active"><a onclick="loadPage()" class="page-link" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)">@Model.Pageinate.CurrentPageIndex</a></li>
+                            @if (Model.Pageinate.HasNextPage)
+                            {
+                                <li class="page-item"><a onclick="loadPage()" class="page-link" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex+1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)">@(Model.Pageinate.CurrentPageIndex+1)</a></li>
+                            }
+                            @if (Model.Pageinate.HasNextPage)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" onclick="loadPage()" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex+1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link " onclick="loadPage()" asp-page="index" asp-route-pageIndex="@(Model.Pageinate.CurrentPageIndex+1)" asp-route-pageSize="@(Model.Pageinate.CurrentPageSize)" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+                    </nav>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        function loadPage() {
+            event.preventDefault();
+            console.log('here');
+            window.location = event.currentTarget.href + '&searchText=' + document.getElementById('orderSearchText').value;
+            return false;
+            //window.location = '/vendor/order/index?pageIndex=1&pageSize=10&searchText=' + document.getElementById('orderSearchText').value;
+        }
+    </script>
+}

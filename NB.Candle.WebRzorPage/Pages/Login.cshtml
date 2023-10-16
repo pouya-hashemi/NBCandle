@@ -1,0 +1,38 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Pages.LoginModel
+@{
+}
+<div class="d-flex justify-content-center align-items-center w-100">
+    <div class="bg-white rounded-3 p-3 w-100">
+        <span class="d-block w-100 border-bottom border-light pb-2 small fw-bold text-start">ورود کاربر</span>
+        <form method="post" asp-route-returnUrl="@(ViewData["returnUrl"])">
+            <div class="row pt-3 g-3 border-bottom border-light pb-3">
+                <div class="x-small text-danger" asp-validation-summary="ModelOnly">
+
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="number" class="form-control direction-rtl" asp-for="LoginVM.Username" placeholder=" ">
+                    <label asp-for="LoginVM.Username" class="x-small ms-2"></label>
+                    <span asp-validation-for="LoginVM.Username" class="xx-small text-danger"></span>
+                </div>
+                <div class="form-floating  col-12 col-md-6">
+                    <input type="password" class="form-control direction-rtl" asp-for="LoginVM.Password" placeholder=" ">
+                    <label asp-for="LoginVM.Password" class="x-small ms-2"></label>
+                    <span asp-validation-for="LoginVM.Password" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 mt-1">
+                    <a href="forgetPassword" class=" x-small cursor-pointer d-block">رمز خود را فراموش کردم</a>
+                    <a asp-page="userRegister" asp-route-returnUrl="@(ViewData["returnUrl"])" class=" x-small cursor-pointer d-block">ثبت نام</a>
+                </div>
+
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-primary x-small" type="submit">
+                    ورود
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+

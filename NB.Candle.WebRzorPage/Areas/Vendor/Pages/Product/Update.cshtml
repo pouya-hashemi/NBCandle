@@ -1,0 +1,64 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Product.UpdateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">ویرایش کالا</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" class="row pt-2 g-3" enctype="multipart/form-data">
+                <input asp-for="Product.ID" hidden />
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="text" class="form-control direction-rtl" asp-for="Product.Name" placeholder=" ">
+                        <label asp-for="Product.Name" class="x-small ms-2"></label>
+                        <span asp-validation-for="Product.Name" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" asp-for="Product.ProductType" asp-items="Model.ProductTypeListItems">
+                        </select>
+                        <label asp-for="Product.ProductType" class="x-small ms-2"></label>
+                    </div>
+                    <span asp-validation-for="Product.ProductType" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" asp-for="Product.CategoryId" asp-items="Model.CategoryListItems">
+                        </select>
+                        <label asp-for="Product.CategoryId" class="x-small ms-2"></label>
+                    </div>
+                    <span asp-validation-for="Product.CategoryId" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6">
+
+                    <label asp-for="Product.IsActive" class="x-small ms-2"></label>
+                    <input type="checkbox" class=" direction-rtl" asp-for="Product.IsActive">
+                    <span asp-validation-for="Product.IsActive" class="xx-small text-danger"></span>
+
+                </div>
+                <div class="col-12 col-md-6">
+
+                    <label asp-for="Product.IsFreeSize" class="x-small ms-2"></label>
+                    <input type="checkbox" class=" direction-rtl" asp-for="Product.IsFreeSize">
+                    <span asp-validation-for="Product.IsFreeSize" class="xx-small text-danger"></span>
+
+                </div>
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

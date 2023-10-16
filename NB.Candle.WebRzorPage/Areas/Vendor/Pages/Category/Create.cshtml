@@ -1,0 +1,64 @@
+﻿@page
+@model NB.Candle.WebRzorPage.Areas.Vendor.Pages.Category.CreateModel
+@{
+    Layout = "/Areas/Vendor/Pages/Shared/_VendorLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white rounded-3 p-2 ">
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom border-light fw-bold small ">
+                <div>
+                    <span class="small">دسته بندی جدید</span>
+                </div>
+                <a class="btn btn-link text-danger xx-small" asp-page="index">
+                    <span class="xx-small">بازگشت</span>
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="row pt-2 g-3">
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="text" class="form-control direction-rtl" asp-for="CreateCategory.Name" placeholder=" ">
+                        <label asp-for="CreateCategory.Name" class="x-small ms-2"></label>
+                        <span asp-validation-for="CreateCategory.Name" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating ">
+                        <input type="text" class="form-control direction-rtl" asp-for="CreateCategory.Description" placeholder=" ">
+                        <label asp-for="CreateCategory.Description" class="x-small ms-2"></label>
+                        <span asp-validation-for="CreateCategory.Description" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input type="number" class="form-control direction-rtl" asp-for="CreateCategory.Sequence" placeholder=" ">
+                        <label asp-for="CreateCategory.Sequence" class="x-small ms-2"></label>
+                        <span asp-validation-for="CreateCategory.Sequence" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating  ">
+                        <input class="form-control" type="file" asp-for="CreateCategory.Image">
+                        <label asp-for="CreateCategory.Image" class="x-small ms-2"></label>
+                        <span asp-validation-for="CreateCategory.Image" class="xx-small text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3">
+
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" asp-for="CreateCategory.ParentCategoryId" asp-items="Model.CategoryListItems">
+                        </select>
+                        <label asp-for="CreateCategory.ParentCategoryId" class="x-small ms-2"></label>
+                    </div>
+                    <span asp-validation-for="CreateCategory.ParentCategoryId" class="xx-small text-danger"></span>
+                </div>
+                <div class="col-12 ">
+                    <button class="btn btn-primary x-small ">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
